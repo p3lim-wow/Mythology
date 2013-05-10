@@ -1,0 +1,7 @@
+## Interface: 50200
+## Author: p3lim
+## Version: Alpha
+## Title: Mythology
+## Notes: More questing enhancements
+
+Mythology.lua
