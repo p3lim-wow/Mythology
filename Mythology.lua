@@ -34,6 +34,23 @@ local function SetLine(...)
 	end
 end
 
+local function GetQuestData(self)
+	if(self.type == 'QUEST') then
+		local questIndex = GetQuestIndexForWatch(self.index)
+		if(questIndex) then
+			local _, level, _, _, _, _, _, daily = GetQuestLogTitle(questIndex)
+			if(daily) then
+				return 1/4, 6/9, 1, 'D'
+			else
+				local color = GetQuestDifficultyColor(level)
+				return color.r, color.g, color.b, level
+			end
+		end
+	end
+
+	return 1, 1, 1
+end
+
 local function IsSuperTracked(self)
 	if(self.type ~= 'QUEST') then return end
 
@@ -51,10 +68,16 @@ local function HighlightLine(self, highlight)
 		local line = self.lines[index]
 		if(line) then
 			if(index == self.startLine) then
+				local r, g, b, prefix = GetQuestData(self)
+				local text = line.text:GetText()
+				if(text and string.sub(text, -1) ~= '\032') then
+					line.text:SetFormattedText('[%s] %s\032', prefix, text)
+				end
+
 				if(highlight) then
-					line.text:SetTextColor(1, 1, 1)
+					line.text:SetTextColor(r, g, b)
 				else
-					line.text:SetTextColor(6/7, 6/7, 6/7)
+					line.text:SetTextColor(r * 6/7, g * 6/7, b * 6/7)
 				end
 			else
 				if(highlight) then
