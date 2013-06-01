@@ -135,6 +135,45 @@ local function SkinLine()
 	end
 end
 
+local nextScenarioLine = 1
+local function SkinScenarioLine()
+	for index = nextScenarioLine, 50 do
+		local line = _G['WatchFrameScenarioLine' .. index]
+		if(line) then
+			line.text:SetFont(font, 8, 'OUTLINEMONOCHROME')
+			line.text:SetShadowColor(0, 0, 0, 0)
+
+			local square = CreateFrame('Frame', nil, line)
+			square:SetPoint('TOPRIGHT', line, 'TOPLEFT', 7, -6)
+			square:SetSize(5, 5)
+			square:SetBackdrop(backdrop)
+			square:SetBackdropColor(4/5, 4/5, 1/5)
+			square:SetBackdropBorderColor(0, 0, 0)
+			line.square = square
+
+			line.icon:Hide()
+		else
+			nextScenarioLine = index
+			break
+		end
+	end
+
+	local _, _, numCriteria = C_Scenario.GetStepInfo()
+	for index = 1, numCriteria do
+		local text, _, completed = C_Scenario.GetCriteriaInfo(index)
+		for lineIndex = 1, nextScenarioLine do
+			local line = _G['WatchFrameScenarioLine' .. lineIndex]
+			if(line and string.find(line.text:GetText(), text)) then
+				if(completed) then
+					line.square:SetBackdropColor(0, 1, 0)
+				else
+					line.square:SetBackdropColor(4/5, 4/5, 4/5)
+				end
+			end
+		end
+	end
+end
+
 local origClick
 local function ClickLine(self, button, ...)
 	if(button == 'RightButton' and not IsShiftKeyDown() and self.type == 'QUEST') then
@@ -170,6 +209,7 @@ Handler:RegisterEvent('PLAYER_LOGIN')
 Handler:SetScript('OnEvent', function(self, event)
 	hooksecurefunc('WatchFrame_SetLine', SetLine)
 	hooksecurefunc('WatchFrame_Update', SkinLine)
+	hooksecurefunc('WatchFrameScenario_UpdateScenario', SkinScenarioLine)
 	hooksecurefunc('QuestPOI_DisplayButton', QuestPOI)
 	hooksecurefunc('SetItemButtonTexture', SkinButton)
 
@@ -193,6 +233,13 @@ Handler:SetScript('OnEvent', function(self, event)
 
 	WatchFrameTitle:Hide()
 	WatchFrameTitle.Show = null
+
+	local ScenarioTextHeader = WatchFrameScenarioFrame.ScrollChild.TextHeader.text
+	ScenarioTextHeader:SetFont(font, 8, 'OUTLINEMONOCHROME')
+	ScenarioTextHeader:SetShadowColor(0, 0, 0, 0)
+	ScenarioTextHeader:SetTextColor(0.85, 0.85, 0)
+
+	SkinScenarioLine()
 
 	WatchFrame_SetSorting(nil, 1)
 
