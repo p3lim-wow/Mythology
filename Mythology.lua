@@ -202,6 +202,14 @@ local function QuestPOI(name, type, index)
 	end
 end
 
+local function QuestAccepted(self, event, id)
+	if(not GetCVarBool('autoQuestWatch')) then return end
+
+	if(not IsQuestWatched(id) and GetNumQuestWatches() < MAX_WATCHABLE_QUESTS) then
+		AddQuestWatch(id)
+	end
+end
+
 local function null() end
 
 local Handler = CreateFrame('Frame')
@@ -245,4 +253,8 @@ Handler:SetScript('OnEvent', function(self, event)
 
 	WorldMapPlayerUpper:EnableMouse(false)
 	WorldMapPlayerLower:EnableMouse(false)
+
+	self:UnregisterEvent(event)
+	self:RegisterEvent('QUEST_ACCEPTED')
+	self:SetScript('OnEvent', QuestAccepted)
 end)
