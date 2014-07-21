@@ -1,14 +1,14 @@
 
-local font = [[Interface\Addons\Mythology\Semplice.ttf]]
-local texture = [[Interface\ChatFrame\ChatFrameBackground]]
-local backdrop = {
-	bgFile = texture, edgeFile = texture, edgeSize = 1,
+local FONT = [[Interface\Addons\Mythology\Semplice.ttf]]
+local TEXTURE = [[Interface\ChatFrame\ChatFrameBackground]]
+local BACKDROP = {
+	bgFile = TEXTURE, edgeFile = TEXTURE, edgeSize = 1,
 }
 
-local function SkinButton(button, texture)
+local function SkinButton(button)
 	if(string.match(button:GetName(), 'WatchFrameItem%d+') and not button.skinned) then
 		button:SetSize(26, 26)
-		button:SetBackdrop(backdrop)
+		button:SetBackdrop(BACKDROP)
 		button:SetBackdropColor(0, 0, 0)
 		button:SetBackdropBorderColor(0, 0, 0)
 
@@ -107,14 +107,14 @@ local function SkinLine()
 	for index = nextLine, 50 do
 		local line = _G['WatchFrameLine' .. index]
 		if(line) then
-			line.text:SetFont(font, 8, 'OUTLINEMONOCHROME')
+			line.text:SetFont(FONT, 8, 'OUTLINEMONOCHROME')
 			line.text:SetShadowColor(0, 0, 0, 0)
 			line.dash:SetAlpha(0)
 
 			local square = CreateFrame('Frame', nil, line)
 			square:SetPoint('TOPRIGHT', line, 'TOPLEFT', 7, -6)
 			square:SetSize(5, 5)
-			square:SetBackdrop(backdrop)
+			square:SetBackdrop(BACKDROP)
 			square:SetBackdropColor(4/5, 4/5, 1/5)
 			square:SetBackdropBorderColor(0, 0, 0)
 			line.square = square
@@ -140,13 +140,13 @@ local function SkinScenarioLine()
 	for index = nextScenarioLine, 50 do
 		local line = _G['WatchFrameScenarioLine' .. index]
 		if(line) then
-			line.text:SetFont(font, 8, 'OUTLINEMONOCHROME')
+			line.text:SetFont(FONT, 8, 'OUTLINEMONOCHROME')
 			line.text:SetShadowColor(0, 0, 0, 0)
 
 			local square = CreateFrame('Frame', nil, line)
 			square:SetPoint('TOPRIGHT', line, 'TOPLEFT', 7, -6)
 			square:SetSize(5, 5)
-			square:SetBackdrop(backdrop)
+			square:SetBackdrop(BACKDROP)
 			square:SetBackdropColor(4/5, 4/5, 1/5)
 			square:SetBackdropBorderColor(0, 0, 0)
 			line.square = square
@@ -243,7 +243,7 @@ Handler:SetScript('OnEvent', function(self, event)
 	WatchFrameTitle.Show = null
 
 	local ScenarioTextHeader = WatchFrameScenarioFrame.ScrollChild.TextHeader.text
-	ScenarioTextHeader:SetFont(font, 8, 'OUTLINEMONOCHROME')
+	ScenarioTextHeader:SetFont(FONT, 8, 'OUTLINEMONOCHROME')
 	ScenarioTextHeader:SetShadowColor(0, 0, 0, 0)
 	ScenarioTextHeader:SetTextColor(0.85, 0.85, 0)
 
